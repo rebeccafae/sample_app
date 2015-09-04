@@ -13,6 +13,10 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     end
 
     assert_template 'users/new'
+    assert_select 'div.alert-danger'
+    # not sure of syntax to write these:
+    # page.must_have_content('Email is invalid')
+    # assert 'Password is too short (minimum is 6 characters)'
   end
 
   test "valid signup information" do
@@ -26,5 +30,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     end
 
     assert_template 'users/show'
+    assert_select 'div.alert-success'
+    assert_not flash.empty?
+    # assert flash.('Welcome to the Sample App!')
   end
 end
