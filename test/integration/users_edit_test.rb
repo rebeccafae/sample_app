@@ -26,5 +26,9 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     @user.reload
     assert_equal name, @user.name
     assert_equal email, @user.email
+    # Exercise 1: Make sure forwarding url reverts to default on subsequent login attempts
+    delete logout_path(@user)
+    log_in_as(@user)
+    assert_redirected_to user_path(@user)
   end
 end
