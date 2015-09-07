@@ -4,11 +4,12 @@ class UsersController < ApplicationController
   before_action :admin_user, only: :destroy
 
   def index
-    @users = User.paginate(page: params[:page])
+    @users = User.where(activated: true).paginate(page: params[:page])
   end
 
   def show
     @user = User.find(params[:id])
+    redirect_to root_url and return unless User.where(activated: true)
   end
 
   def new
@@ -19,7 +20,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       @user.send_activation_email
-      flash[:info] = "Please check your email to activate your account."
+      flash[:info] = "please check your email to activate your account."
       redirect_to root_url
     else
       render 'new'
@@ -31,7 +32,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update_attributes(user_params)
-      flash[:success] = "Profile updated"
+      flash[:success] = "profile updated"
       redirect_to @user
     else
       render 'edit'
@@ -40,7 +41,7 @@ class UsersController < ApplicationController
 
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "User deleted"
+    flash[:success] = "user deleted"
     redirect_to users_url
   end
 
@@ -50,24 +51,24 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
-  #Before filters
+  #before filters
 
-  #Confirms a logged-in user.
+  #confirms a logged-in user.
   def logged_in_user
     unless logged_in?
       store_location
-      flash[:danger] = "Please log in."
+      flash[:danger] = "please log in."
       redirect_to login_url
     end
   end
 
-  # Confirms the correct user.
+  # confirms the correct user.
   def correct_user
     @user = User.find(params[:id])
     redirect_to(root_url) unless current_user?(@user)
   end
 
-  # Confirms an admin user.
+  # confirms an admin user.
   def admin_user
     redirect_to(root_url) unless current_user.admin?
   end
