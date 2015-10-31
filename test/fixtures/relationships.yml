@@ -1,0 +1,15 @@
+one:
+  follower: rebecca
+  followed: lana
+
+two:
+  follower: rebecca
+  followed: mallory
+
+three:
+  follower: lana
+  followed: rebecca
+
+four:
+  follower: archer
+  followed: rebecca
